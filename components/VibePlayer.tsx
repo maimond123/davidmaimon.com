@@ -6,7 +6,6 @@ type EmbedTrack = { src: string; title?: string; artist?: string };
 // Paste up to 10 embed src URLs (Spotify or SoundCloud). Example provided.
 const EMBEDS: EmbedTrack[] = [
   {
-    // Example SoundCloud embed src (you can replace with Spotify embed srcs)
     src:
       "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2132660832&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
     title: "Make A Move",
@@ -23,6 +22,36 @@ const EMBEDS: EmbedTrack[] = [
       "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2094781455&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
     title: "GBP x A Fresh Energy | DJ Daniel Wolf Remix",
     artist: "Daniel Wolf | DJ",
+  },
+  {
+    src:
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2158157550&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+    title: "Loos x Fake ID (A-TUT Mashup)",
+    artist: "Austin Tuttle",
+  },
+  {
+    src:
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1816423437&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+    title: "geods sorèd - Rouge",
+    artist: "55 MUSIC",
+  },
+  {
+    src:
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A655379654&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+    title: "Kerri Chandler & Jerome Sydenham - You're In My System (Dennis Quin Remix) BBC Radio 1 Premiere",
+    artist: "DENNIS QUIN",
+  },
+  {
+    src:
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A768350119&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+    title: "Safaera",
+    artist: "Bad-Bunny",
+  },
+  {
+    src:
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1947131483&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+    title: "Marsolo - Sense Of Style",
+    artist: "Koltrax",
   },
 ];
 
