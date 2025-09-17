@@ -3,6 +3,7 @@ import StatsBar from "@/components/StatsBar";
 import LinksRail from "@/components/LinksRail";
 import Ticker from "@/components/Ticker";
 import VibePlayer from "@/components/VibePlayer";
+import CommitBreakdown from "@/components/CommitBreakdown";
 import { Landmark } from "lucide-react";
 
 export default function Home() {
@@ -20,17 +21,20 @@ export default function Home() {
           <h1 className="font-display text-2xl md:text-3xl tracking-tight">
             <span className="text-ice/80">/</span> <span className="text-lime">DeSci</span> Terminal
           </h1>
-          <a
-            href="https://www.instagram.com/dukeuniversity/?hl=en"
-            target="_blank"
-            rel="noreferrer"
-            className="group relative inline-flex items-center gap-2 text-xs font-mono text-ice/70"
-            aria-label="Duke University Instagram"
-          >
-            <span>Duke University</span>
-            <Landmark className="w-4 h-4 text-ice/70 group-hover:text-white" />
-            <span className="pointer-events-none absolute left-0 -bottom-1 h-px w-0 bg-white/80 transition-all duration-200 group-hover:w-full" />
-          </a>
+          <div className="inline-flex items-center gap-3">
+            <a
+              href="https://www.instagram.com/dukeuniversity/?hl=en"
+              target="_blank"
+              rel="noreferrer"
+              className="group relative inline-flex items-center gap-2 text-xs font-mono text-white"
+              aria-label="Duke University Instagram"
+            >
+              <span>Duke </span>
+              <Landmark className="w-4 h-4 text-white group-hover:text-white" />
+              <span className="pointer-events-none absolute left-0 -bottom-1 h-px w-0 bg-white/80 transition-all duration-200 group-hover:w-full" />
+            </a>
+            <span className="text-xs font-mono text-white">— CS · Stats · Comp Bio</span>
+          </div>
         </div>
         <p className="text-base md:text-lg text-ice/90 leading-relaxed max-w-3xl">
           I build at the edge of <span className="text-lime">AI × Biology × DeSci</span>.
@@ -58,6 +62,11 @@ export default function Home() {
           <li>2025‑09‑08 — molecule links → rail</li>
         </ul>
       </TerminalCard>
+
+      <div className="h-4" />
+
+      {/* All-time commit breakdown */}
+      <CommitBreakdown />
 
       <div className="h-4" />
 

@@ -1,10 +1,13 @@
-export default function StatsBar() {
+import { getCombinedCommitCountLastYear } from "@/lib/github";
+
+export default async function StatsBar() {
+  const commits = await getCombinedCommitCountLastYear(365);
   const items = [
-    { k: "commits", v: "2,041" },
+    { k: "commits", v: commits.toLocaleString() },
     { k: "experiments", v: "58" },
     { k: "hypotheses", v: "19" },
     { k: "now", v: "shipping" },
-  ];
+  ] as const;
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
       {items.map((it) => (
