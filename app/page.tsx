@@ -4,13 +4,13 @@ import LinksRail from "@/components/LinksRail";
 import Ticker from "@/components/Ticker";
 import VibePlayer from "@/components/VibePlayer";
 import CommitBreakdown from "@/components/CommitBreakdown";
-import { Landmark } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   const tickerItems = [
     "DeSci note: marginal data → collective benefit → longevity",
     "Shipping: terminal UI v1",
-    "Email: david@duke.edu",
+    "Email: david.maimon@duke.edu",
   ];
 
   return (
@@ -26,11 +26,10 @@ export default function Home() {
               href="https://www.instagram.com/dukeuniversity/?hl=en"
               target="_blank"
               rel="noreferrer"
-              className="group relative inline-flex items-center gap-2 text-xs font-mono text-white"
+              className="group relative inline-flex items-center justify-center text-white"
               aria-label="Duke University Instagram"
             >
-              <span>Duke </span>
-              <Landmark className="w-4 h-4 text-white group-hover:text-white" />
+              <Image src="/duke_logo_1.png" alt="Duke University" width={25} height={25} className="block" />
               <span className="pointer-events-none absolute left-0 -bottom-1 h-px w-0 bg-white/80 transition-all duration-200 group-hover:w-full" />
             </a>
             <span className="text-xs font-mono text-white">— CS · Stats · Comp Bio</span>
