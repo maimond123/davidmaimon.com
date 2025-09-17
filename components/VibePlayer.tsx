@@ -1,59 +1,103 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-type Song = { title: string; artist: string; src: string };
+type EmbedTrack = { src: string; title?: string; artist?: string };
 
-const SONGS: Song[] = [
-  { title: "Glide", artist: "D.", src: "/audio/glide.mp3" },
-  { title: "Bloom", artist: "D.", src: "/audio/bloom.mp3" },
-  { title: "Neural Drift", artist: "D.", src: "/audio/neural_drift.mp3" },
+// Paste up to 10 embed src URLs (Spotify or SoundCloud). Example provided.
+const EMBEDS: EmbedTrack[] = [
+  {
+    // Example SoundCloud embed src (you can replace with Spotify embed srcs)
+    src:
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2132660832&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+    title: "Make A Move",
+    artist: "geods sorèd",
+  },
+  {
+    src:
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2114764728&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+    title: "Can't Believe It",
+    artist: "geods sorèd",
+  },
+  {
+    src:
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2094781455&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+    title: "GBP x A Fresh Energy | DJ Daniel Wolf Remix",
+    artist: "Daniel Wolf | DJ",
+  },
 ];
 
-function pickDailyIndex(): number {
-  const today = new Date().toISOString().slice(0, 10);
-  const saved = typeof window !== "undefined" ? localStorage.getItem("dailySong") : null;
-  if (saved) {
-    try {
-      const obj = JSON.parse(saved);
-      if (obj.date === today) return obj.index;
-    } catch {}
+function ensureAutoplay(src: string, shouldPlay: boolean): string {
+  try {
+    const url = new URL(src);
+    const host = url.host;
+    if (host.includes("soundcloud.com")) {
+      url.searchParams.set("auto_play", shouldPlay ? "true" : "false");
+    } else if (host.includes("spotify.com")) {
+      // Not officially supported by Spotify, but keep best-effort param
+      url.searchParams.set("autoplay", shouldPlay ? "1" : "0");
+    }
+    return url.toString();
+  } catch {
+    // Fallback to raw string; append a simple toggle if possible
+    if (src.includes("soundcloud")) {
+      const hasAuto = /[?&]auto_play=/.test(src);
+      if (hasAuto) return src.replace(/auto_play=(true|false)/, `auto_play=${shouldPlay ? "true" : "false"}`);
+      const sep = src.includes("?") ? "&" : "?";
+      return `${src}${sep}auto_play=${shouldPlay ? "true" : "false"}`;
+    }
+    return src;
   }
-  const index = Math.floor(Math.random() * SONGS.length);
-  if (typeof window !== "undefined") {
-    localStorage.setItem("dailySong", JSON.stringify({ date: today, index }));
-  }
-  return index;
 }
 
 export default function VibePlayer() {
-  const [idx, setIdx] = useState<number>(() => pickDailyIndex());
-  const [playing, setPlaying] = useState(false);
-  const aRef = useRef<HTMLAudioElement | null>(null);
-  const s = SONGS[idx];
+  const [index, setIndex] = useState<number>(0);
+  const [playing, setPlaying] = useState<boolean>(true); // try to autoplay on mount
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const track = EMBEDS[index] ?? EMBEDS[0];
+
+  const iframeSrc = useMemo(() => ensureAutoplay(track.src, playing), [track.src, playing]);
 
   useEffect(() => {
-    setIdx(pickDailyIndex());
+    // In case browsers block autoplay, ensure first user interaction will start playback.
+    // No-op here; playback will be triggered when Play is clicked as we refresh src with autoplay on.
   }, []);
 
+  const displayTitle = track.title ?? `Track ${index + 1}`;
+  const displayArtist = track.artist ?? "Playlist";
+
   return (
-    <div className="inline-flex items-center gap-3 p-2 pr-3 rounded-lg border border-line bg-surface/70">
+    <div className="inline-flex items-center gap-3 p-2 pr-3 rounded-lg border border-line bg-surface/70 relative">
       <button
         className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
-        onClick={() => {
-          const a = aRef.current!;
-          if (a.paused) { a.play(); setPlaying(true); }
-          else { a.pause(); setPlaying(false); }
-        }}
+        onClick={() => setPlaying((p) => !p)}
         aria-label={playing ? "Pause" : "Play"}
       >
         <span className="font-mono text-sm">{playing ? "❚❚" : "▶"}</span>
       </button>
+      <button
+        className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
+        onClick={() => {
+          setIndex((i) => (i + 1) % EMBEDS.length);
+          setPlaying(true);
+        }}
+        aria-label="Next"
+      >
+        <span className="font-mono text-sm">»</span>
+      </button>
       <div className="text-sm">
         <span className="font-mono text-ice/80">NOW PLAYING:</span>{" "}
-        <span className="font-mono text-lime">{s.title}</span>{" "}
-        <span className="text-ice/70">— {s.artist}</span>
+        <span className="font-mono text-lime">{displayTitle}</span>{" "}
+        <span className="text-ice/70">— {displayArtist}</span>
       </div>
-      <audio ref={aRef} src={s.src} loop preload="none" />
+      {/* Hidden iframe to keep layout unchanged while audio plays */}
+      <iframe
+        ref={iframeRef}
+        key={`${index}-${playing}`}
+        src={iframeSrc}
+        title={displayTitle}
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        style={{ position: "absolute", width: 0, height: 0, border: 0, left: -9999, top: 0, opacity: 0 }}
+      />
     </div>
   );
 }
