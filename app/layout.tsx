@@ -10,6 +10,16 @@ export const metadata: Metadata = {
   title: "David Maimon — DeSci Terminal",
   description: "Builder at the edge of AI × Biology × DeSci. Duke CS/Stats/Comp Bio.",
   metadataBase: new URL("https://your-domain.com"),
+  icons: {
+    icon: [
+      { url: "/favicon/favicon.ico" },
+      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96" },
+    ],
+    shortcut: ["/favicon/favicon.ico"],
+    apple: ["/favicon/apple-touch-icon.png"],
+  },
+  manifest: "/favicon/site.webmanifest",
   openGraph: {
     title: "DeSci Terminal",
     description: "AI × Biology × DeSci",

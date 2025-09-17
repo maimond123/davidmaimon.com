@@ -52,9 +52,6 @@ export default async function CommitBreakdown() {
             );
           })}
           <circle cx="60" cy="60" r="34" fill="#14181F" />
-          <text x="60" y="64" textAnchor="middle" className="fill-current" style={{ fontFamily: 'var(--font-jet), ui-monospace, SFMono-Regular', fontSize: 12, fill: '#E8F1EA' }}>
-            {total.toLocaleString()} commits
-          </text>
         </svg>
 
         <div className="space-y-2">
