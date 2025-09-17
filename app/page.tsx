@@ -5,6 +5,7 @@ import Ticker from "@/components/Ticker";
 import VibePlayer from "@/components/VibePlayer";
 import CommitBreakdown from "@/components/CommitBreakdown";
 import Image from "next/image";
+import TypewriterTitle from "@/components/TypewriterTitle";
 
 export default function Home() {
   const tickerItems = [
@@ -18,9 +19,7 @@ export default function Home() {
       {/* Header / Hero */}
       <header className="mb-8 md:mb-12">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="font-display text-2xl md:text-3xl tracking-tight">
-            <span className="text-ice/80">/</span> <span className="text-lime">DeSci</span> Terminal
-          </h1>
+          <TypewriterTitle className="font-display text-2xl md:text-3xl tracking-tight" />
           <div className="inline-flex items-center gap-3">
             <a
               href="https://www.instagram.com/dukeuniversity/?hl=en"
