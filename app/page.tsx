@@ -16,7 +16,7 @@ export default function Home() {
 
   const experiences: { date: string; company: string; href?: string }[] = [
     { date: "Present – Future", company: "De Sci + AI..." },
-    { date: "Jul 2024 – Present", company: "Peak Artificial Intelligence", href: "https://peak.watch" },
+    { date: "Jul 2025 – Present", company: "Peak Artificial Intelligence", href: "https://peak.watch" },
     { date: "Dec 2025 – Jul 2025", company: "Alumlo", href: "https://alumlo.com" },
     { date: "Aug 2024 – May 2025", company: "Christensen Family Center for Innovation" },
     { date: "May 2024 – Aug 2024", company: "Stealth Startup" },
