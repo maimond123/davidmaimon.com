@@ -1,5 +1,4 @@
 import TerminalCard from "@/components/TerminalCard";
-import StatsBar from "@/components/StatsBar";
 import LinksRail from "@/components/LinksRail";
 import Ticker from "@/components/Ticker";
 import VibePlayer from "@/components/VibePlayer";
@@ -9,9 +8,20 @@ import TypewriterTitle from "@/components/TypewriterTitle";
 
 export default function Home() {
   const tickerItems = [
-    "DeSci note: marginal data → collective benefit → longevity",
-    "Shipping: terminal UI v1",
-    "Email: david.maimon@duke.edu",
+    "**DeSci Thesis:**", 
+    "1. Each marginal data point → a unified, decentralized graph",
+    "2. Aggregate → inference → better hypotheses & decisions",
+    "3. Result: accelerated longevity & human flourishing with AI. "
+  ];
+
+  const experiences: { date: string; company: string; href?: string }[] = [
+    { date: "Present – Future", company: "De Sci + AI..." },
+    { date: "Jul 2024 – Present", company: "Peak Artificial Intelligence", href: "https://peak.watch" },
+    { date: "Dec 2025 – Jul 2025", company: "Alumlo", href: "https://alumlo.com" },
+    { date: "Aug 2024 – May 2025", company: "Christensen Family Center for Innovation" },
+    { date: "May 2024 – Aug 2024", company: "Stealth Startup" },
+    { date: "May 2023 – Sep 2023", company: "EduTrack", href: "https://startuptechnologies.wixsite.com/edutrack" },
+    { date: "Jun 2022 – Aug 2022", company: "TRC Systems LLC" },
   ];
 
   return (
@@ -35,29 +45,44 @@ export default function Home() {
           </div>
         </div>
         <p className="text-base md:text-lg text-ice/90 leading-relaxed max-w-3xl">
-          I build at the edge of <span className="text-lime">AI × Biology × DeSci</span>.
-          I believe every marginal datapoint added to an open network compounds into shared insight—
+          I am interested in <span className="text-lime">AI × Biology × DeSci</span>.
+          Every marginal datapoint added to an open network compounds into shared insight,
           training systems that accelerate longevity and human flourishing.
         </p>
       </header>
 
-      {/* Stats */}
-      <div className="mb-8">
-        <StatsBar />
-      </div>
+      
 
       {/* Vibe + Links */}
       <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8">
         <VibePlayer />
-        <LinksRail />
+        <div className="flex-1">
+          <LinksRail />
+        </div>
       </div>
 
       {/* Build Log / Projects */}
-      <TerminalCard title="build_log" right="tail -n 3">
-        <ul className="space-y-3 font-mono text-sm">
-          <li>2025‑09‑17 — launched terminal v1</li>
-          <li>2025‑09‑12 — added daily-song player</li>
-          <li>2025‑09‑08 — molecule links → rail</li>
+      <TerminalCard title="build_log" right="ls -l">
+        <ul className="space-y-6 font-mono text-sm">
+          {experiences.map((e) => (
+            <li key={`${e.date}-${e.company}`} className="flex items-baseline gap-6">
+              <span className="text-ice/70 w-48 md:w-56">{e.date}</span>
+              <span className="text-ice/90 inline-flex items-center gap-2">
+                {e.company}
+                {e.href && (
+                  <a
+                    href={e.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${e.company} external link`}
+                    className="text-ice/60 hover:text-lime transition text-base md:text-lg leading-none"
+                  >
+                    ↗
+                  </a>
+                )}
+              </span>
+            </li>
+          ))}
         </ul>
       </TerminalCard>
 
@@ -65,16 +90,6 @@ export default function Home() {
 
       {/* All-time commit breakdown */}
       <CommitBreakdown />
-
-      <div className="h-4" />
-
-      <TerminalCard title="desci_thesis" right="cat thesis.md">
-        <ol className="list-decimal pl-5 space-y-2 text-ice/90">
-          <li>Each marginal data point → a unified, decentralized graph.</li>
-          <li>Aggregate → inference → better hypotheses & decisions.</li>
-          <li>Result: accelerated longevity & human flourishing with AI.</li>
-        </ol>
-      </TerminalCard>
 
       <Ticker items={tickerItems} />
     </main>

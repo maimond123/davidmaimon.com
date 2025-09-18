@@ -81,6 +81,7 @@ function ensureAutoplay(src: string, shouldPlay: boolean): string {
 export default function VibePlayer() {
   const [index, setIndex] = useState<number>(0);
   const [playing, setPlaying] = useState<boolean>(true); // try to autoplay on mount
+  const [progress, setProgress] = useState<number>(0); // 0..100 synthetic progress
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const track = EMBEDS[index] ?? EMBEDS[0];
 
@@ -95,7 +96,7 @@ export default function VibePlayer() {
   const displayArtist = track.artist ?? "Playlist";
 
   return (
-    <div className="inline-flex items-center gap-3 p-2 pr-3 rounded-lg border border-line bg-surface/70 relative">
+    <div className="inline-flex items-center gap-3 p-2 pr-3 rounded-lg border border-line bg-surface/70 relative w-full md:w-1/2">
       <button
         className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
         onClick={() => setPlaying((p) => !p)}
@@ -106,17 +107,38 @@ export default function VibePlayer() {
       <button
         className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
         onClick={() => {
+          setIndex((i) => (i - 1 + EMBEDS.length) % EMBEDS.length);
+          setPlaying(true);
+          setProgress(0);
+        }}
+        aria-label="Previous"
+      >
+        <span className="font-mono text-sm">«</span>
+      </button>
+      <button
+        className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
+        onClick={() => {
           setIndex((i) => (i + 1) % EMBEDS.length);
           setPlaying(true);
+          setProgress(0);
         }}
         aria-label="Next"
       >
         <span className="font-mono text-sm">»</span>
       </button>
-      <div className="text-sm">
+      <div className="text-sm flex-1 min-w-0">
         <span className="font-mono text-ice/80">NOW PLAYING:</span>{" "}
         <span className="font-mono text-lime">{displayTitle}</span>{" "}
         <span className="text-ice/70">— {displayArtist}</span>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={progress}
+          onChange={(e) => setProgress(Number(e.target.value))}
+          className="w-full mt-2 accent-lime"
+          aria-label="Seek"
+        />
       </div>
       {/* Hidden iframe to keep layout unchanged while audio plays */}
       <iframe

@@ -22,7 +22,7 @@ const config: Config = {
         mono: ["var(--font-jet)"],
       },
       animation: {
-        marquee: "marquee 24s linear infinite",
+        marquee: "marquee 40s linear infinite",
       },
       keyframes: {
         marquee: {

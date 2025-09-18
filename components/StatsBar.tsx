@@ -2,9 +2,14 @@ import { getCombinedCommitCountLastYear } from "@/lib/github";
 
 export default async function StatsBar() {
   const commits = await getCombinedCommitCountLastYear(365);
+  // Compute time elapsed (age) in years with 5 significant figures
+  const birthUTC = Date.UTC(2006, 4, 11, 5, 0, 0); // 2006-05-11 05:00:00 UTC
+  const msPerYear = 365.2425 * 24 * 60 * 60 * 1000;
+  const ageYears = (Date.now() - birthUTC) / msPerYear;
+  const timeElapsed = ageYears.toPrecision(5);
   const items = [
     { k: "commits", v: commits.toLocaleString() },
-    { k: "experiments", v: "58" },
+    { k: "time elapsed", v: timeElapsed },
     { k: "hypotheses", v: "19" },
     { k: "now", v: "shipping" },
   ] as const;

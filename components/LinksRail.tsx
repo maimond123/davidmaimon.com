@@ -10,7 +10,7 @@ const links = [
 
 export default function LinksRail() {
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
       {links.map(({ name, href, icon: Icon }) => (
         <a
           key={name}
