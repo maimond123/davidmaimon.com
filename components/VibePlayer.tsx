@@ -90,20 +90,76 @@ export default function VibePlayer() {
   const [playing, setPlaying] = useState<boolean>(false); // first-click unlock for autoplay policies
   const [elapsedSec, setElapsedSec] = useState<number>(0);
   const [userActivated, setUserActivated] = useState<boolean>(false);
+  const [durationSec, setDurationSec] = useState<number>(200);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const widgetRef = useRef<any>(null);
+  const [widgetLoaded, setWidgetLoaded] = useState<boolean>(false);
   const track = EMBEDS[index] ?? EMBEDS[0];
 
   const iframeSrc = useMemo(() => ensureAutoplay(track.src, playing), [index, track.src, playing, userActivated]);
 
+  // Load SoundCloud Widget API once
   useEffect(() => {
-    // Synthetic progress timer since cross-origin media controls are restricted
+    if (typeof window === "undefined") return;
+    if ((window as any).SC && (window as any).SC.Widget) {
+      setWidgetLoaded(true);
+      return;
+    }
+    const s = document.createElement("script");
+    s.src = "https://w.soundcloud.com/player/api.js";
+    s.async = true;
+    s.onload = () => setWidgetLoaded(true);
+    document.body.appendChild(s);
+    return () => {
+      try {
+        document.body.removeChild(s);
+      } catch {}
+    };
+  }, []);
+
+  // Initialize widget and bind events whenever iframe src changes after activation
+  useEffect(() => {
+    if (!userActivated || !widgetLoaded || !iframeRef.current || !(window as any).SC) return;
+    const widget = (window as any).SC.Widget(iframeRef.current);
+    widgetRef.current = widget;
+    setElapsedSec(0);
+    setDurationSec(track.durationSec ?? 200);
+    widget.bind("ready", () => {
+      widget.getDuration((d: number) => setDurationSec(Math.max(1, Math.round(d / 1000))));
+      if (playing) widget.play();
+    });
+    widget.bind("play", () => setPlaying(true));
+    widget.bind("pause", () => setPlaying(false));
+    widget.bind("finish", () => {
+      setIndex((i) => (i + 1) % EMBEDS.length);
+    });
+
+    const id = window.setInterval(() => {
+      try {
+        widget.getPosition((ms: number) => setElapsedSec(ms / 1000));
+        widget.getDuration((d: number) => setDurationSec(Math.max(1, Math.round(d / 1000))));
+      } catch {}
+    }, 500);
+    return () => {
+      try {
+        widget.unbind("ready");
+        widget.unbind("play");
+        widget.unbind("pause");
+        widget.unbind("finish");
+      } catch {}
+      clearInterval(id);
+    };
+  }, [userActivated, widgetLoaded, iframeSrc]);
+
+  // Fallback synthetic progress if widget is not yet available
+  useEffect(() => {
+    if (!userActivated || widgetRef.current) return; // widget handles progress once ready
     const duration = track.durationSec ?? 200;
-    if (!playing || !userActivated) return;
+    if (!playing) return;
     const id = setInterval(() => {
       setElapsedSec((s) => {
-        const next = s + 0.25; // 250ms tick
+        const next = s + 0.25;
         if (next >= duration) {
-          // Auto-advance to next track
           setIndex((i) => (i + 1) % EMBEDS.length);
           return 0;
         }
@@ -111,11 +167,10 @@ export default function VibePlayer() {
       });
     }, 250);
     return () => clearInterval(id);
-  }, [playing, userActivated, index, track.durationSec]);
+  }, [userActivated, playing, index, track.durationSec]);
 
   const displayTitle = track.title ?? `Track ${index + 1}`;
   const displayArtist = track.artist ?? "Playlist";
-  const durationSec = track.durationSec ?? 200;
   useEffect(() => {
     // reset elapsed when track changes
     setElapsedSec(0);
@@ -135,6 +190,11 @@ export default function VibePlayer() {
         className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
         onClick={() => {
           if (!userActivated) setUserActivated(true);
+          const w = widgetRef.current;
+          if (w) {
+            if (playing) w.pause();
+            else w.play();
+          }
           setPlaying((p) => !p);
         }}
         aria-label={playing ? "Pause" : "Play"}
