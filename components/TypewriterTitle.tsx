@@ -2,8 +2,8 @@
 import React from "react";
 
 export default function TypewriterTitle({ className }: { className?: string }) {
-  const fullText = "David Maimon's Terminal";
-  const greenSegmentLength = "David Maimon's".length;
+  const fullText = "David's Terminal";
+  const greenSegmentLength = "David's".length;
 
   const [index, setIndex] = React.useState(0);
   const [done, setDone] = React.useState(false);
