@@ -96,7 +96,7 @@ export default function VibePlayer() {
   const [widgetLoaded, setWidgetLoaded] = useState<boolean>(false);
   const track = EMBEDS[index] ?? EMBEDS[0];
 
-  const iframeSrc = useMemo(() => ensureAutoplay(track.src, playing), [index, track.src, playing, userActivated]);
+  const iframeSrc = useMemo(() => ensureAutoplay(track.src, userActivated), [index, track.src, userActivated]);
 
   // Load SoundCloud Widget API once
   useEffect(() => {
@@ -126,7 +126,9 @@ export default function VibePlayer() {
     setDurationSec(track.durationSec ?? 200);
     widget.bind("ready", () => {
       widget.getDuration((d: number) => setDurationSec(Math.max(1, Math.round(d / 1000))));
-      if (playing) widget.play();
+      // Always explicitly call play() on ready after activation for Safari
+      widget.play();
+      setPlaying(true);
     });
     widget.bind("play", () => setPlaying(true));
     widget.bind("pause", () => setPlaying(false));
@@ -189,13 +191,15 @@ export default function VibePlayer() {
       <button
         className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
         onClick={() => {
-          if (!userActivated) setUserActivated(true);
+          if (!userActivated) {
+            setUserActivated(true);
+            return;
+          }
           const w = widgetRef.current;
           if (w) {
             if (playing) w.pause();
             else w.play();
           }
-          setPlaying((p) => !p);
         }}
         aria-label={playing ? "Pause" : "Play"}
       >
@@ -243,7 +247,7 @@ export default function VibePlayer() {
       {userActivated && (
         <iframe
           ref={iframeRef}
-          key={`${index}-${playing}`}
+          key={`${index}-${userActivated}`}
           src={iframeSrc}
           title={displayTitle}
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
