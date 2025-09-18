@@ -87,17 +87,18 @@ function ensureAutoplay(src: string, shouldPlay: boolean): string {
 
 export default function VibePlayer() {
   const [index, setIndex] = useState<number>(0);
-  const [playing, setPlaying] = useState<boolean>(true); // try to autoplay on mount
+  const [playing, setPlaying] = useState<boolean>(false); // first-click unlock for autoplay policies
   const [elapsedSec, setElapsedSec] = useState<number>(0);
+  const [userActivated, setUserActivated] = useState<boolean>(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const track = EMBEDS[index] ?? EMBEDS[0];
 
-  const iframeSrc = useMemo(() => ensureAutoplay(track.src, playing), [track.src, playing]);
+  const iframeSrc = useMemo(() => ensureAutoplay(track.src, playing), [index, track.src, playing, userActivated]);
 
   useEffect(() => {
     // Synthetic progress timer since cross-origin media controls are restricted
     const duration = track.durationSec ?? 200;
-    if (!playing) return;
+    if (!playing || !userActivated) return;
     const id = setInterval(() => {
       setElapsedSec((s) => {
         const next = s + 0.25; // 250ms tick
@@ -110,7 +111,7 @@ export default function VibePlayer() {
       });
     }, 250);
     return () => clearInterval(id);
-  }, [playing, track.durationSec]);
+  }, [playing, userActivated, index, track.durationSec]);
 
   const displayTitle = track.title ?? `Track ${index + 1}`;
   const displayArtist = track.artist ?? "Playlist";
@@ -132,7 +133,10 @@ export default function VibePlayer() {
     <div className="inline-flex items-center gap-3 p-2 pr-3 rounded-lg border border-line bg-surface/70 relative w-full md:w-1/2">
       <button
         className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
-        onClick={() => setPlaying((p) => !p)}
+        onClick={() => {
+          if (!userActivated) setUserActivated(true);
+          setPlaying((p) => !p);
+        }}
         aria-label={playing ? "Pause" : "Play"}
       >
         <span className="font-mono text-sm">{playing ? "❚❚" : "▶"}</span>
@@ -140,6 +144,7 @@ export default function VibePlayer() {
       <button
         className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
         onClick={() => {
+          if (!userActivated) setUserActivated(true);
           setIndex((i) => (i - 1 + EMBEDS.length) % EMBEDS.length);
           setPlaying(true);
           setElapsedSec(0);
@@ -151,6 +156,7 @@ export default function VibePlayer() {
       <button
         className="px-2 py-1 rounded-md bg-black/40 border border-line hover:border-lime/70"
         onClick={() => {
+          if (!userActivated) setUserActivated(true);
           setIndex((i) => (i + 1) % EMBEDS.length);
           setPlaying(true);
           setElapsedSec(0);
@@ -174,14 +180,16 @@ export default function VibePlayer() {
         </div>
       </div>
       {/* Hidden iframe to keep layout unchanged while audio plays */}
-      <iframe
-        ref={iframeRef}
-        key={`${index}-${playing}`}
-        src={iframeSrc}
-        title={displayTitle}
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        style={{ position: "absolute", width: 0, height: 0, border: 0, left: -9999, top: 0, opacity: 0 }}
-      />
+      {userActivated && (
+        <iframe
+          ref={iframeRef}
+          key={`${index}-${playing}`}
+          src={iframeSrc}
+          title={displayTitle}
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          style={{ position: "absolute", width: 1, height: 1, border: 0, left: 0, top: 0, opacity: 0, pointerEvents: "none" }}
+        />
+      )}
     </div>
   );
 }
