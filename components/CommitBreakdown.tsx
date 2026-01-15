@@ -13,7 +13,7 @@ export default async function CommitBreakdown() {
   const otherPct = Math.max(0, 100 - personalPct - workPct);
 
   const slices = [
-    { label: "Personal", value: personal, pct: personalPct, color: "#B7FF3C" },
+    { label: "Personal", value: personal, pct: personalPct, color: "#FFFFFF" },
     { label: "Work", value: work, pct: workPct, color: "#BFE9FF" },
     { label: "Other", value: other, pct: otherPct, color: "#7A8CA3" },
   ];

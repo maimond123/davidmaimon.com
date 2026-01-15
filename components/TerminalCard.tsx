@@ -27,7 +27,7 @@ export default function TerminalCard({
       <div className="flex items-center justify-between pb-3 border-b border-line/80">
         <div className="flex items-center gap-2">
           <span className="inline-flex gap-1">
-            <i className="w-2 h-2 rounded-full bg-lime/80 shadow-[0_0_8px_rgba(183,255,60,.6)]" />
+            <i className="w-2 h-2 rounded-full bg-lime/80 shadow-[0_0_8px_rgba(255,255,255,.4)]" />
             <i className="w-2 h-2 rounded-full bg-ice/80" />
             <i className="w-2 h-2 rounded-full bg-line" />
           </span>

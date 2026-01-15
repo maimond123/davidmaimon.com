@@ -8,12 +8,12 @@ const config: Config = {
         bg: "#0B0E13",
         surface: "#14181F",
         line: "#1A1F29",
-        lime: "#B7FF3C",
+        lime: "#FFFFFF",
         ice: "#BFE9FF",
         text: "#E8F1EA",
       },
       boxShadow: {
-        glow: "0 0 24px rgba(183,255,60,.25)",
+        glow: "0 0 24px rgba(255,255,255,.15)",
       },
       fontFamily: {
         // wired via next/font in layout

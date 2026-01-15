@@ -8,14 +8,14 @@ import TypewriterTitle from "@/components/TypewriterTitle";
 
 export default function Home() {
   const tickerItems = [
-    "**DeSci Thesis:**", 
-    "1. Each marginal data point → a unified, decentralized graph",
-    "2. Aggregate → inference → better hypotheses & decisions",
-    "3. Result: accelerated longevity & human flourishing with AI. "
+    "**ZK-Proofs & Verifiable Inference:**", 
+    "1. Cryptographic proofs enable trustless verification of computation",
+    "2. Verifiable inference → provable correctness without revealing data",
+    "3. Result: privacy-preserving AI systems with mathematical guarantees. "
   ];
 
   const experiences: { date: string; company: string; href?: string }[] = [
-    { date: "Present – Future", company: "De Sci + AI..." },
+    { date: "Present – Future", company: "ZK-proofs + Verifiable Inference..." },
     { date: "Jul 2025 – Present", company: "Peak Artificial Intelligence", href: "https://peak.watch" },
     { date: "Dec 2025 – Jul 2025", company: "Alumlo", href: "https://alumlo.com" },
     { date: "Aug 2024 – May 2025", company: "Christensen Family Center for Innovation" },
@@ -41,13 +41,13 @@ export default function Home() {
               <Image src="/duke_logo.png" alt="Duke University" width={25} height={25} className="block" />
               <span className="pointer-events-none absolute left-0 -bottom-1 h-px w-0 bg-white/80 transition-all duration-200 group-hover:w-full" />
             </a>
-            <span className="text-xs font-mono text-white">— CS · Stats · Comp Bio</span>
+            <span className="text-xs font-mono text-white">— CS · Math</span>
           </div>
         </div>
         <p className="text-base md:text-lg text-ice/90 leading-relaxed max-w-3xl">
-          I am interested in <span className="text-lime">AI × Biology × DeSci</span>.
-          Every marginal datapoint added to an open network compounds into shared insight,
-          training systems that accelerate longevity and human flourishing.
+          I am interested in <span className="text-lime">ZK-proofs × Verifiable Inference</span>.
+          Cryptographic proofs enable trustless verification of computation,
+          creating privacy-preserving AI systems with mathematical guarantees.
         </p>
       </header>
 
