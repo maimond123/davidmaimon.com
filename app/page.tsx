@@ -2,7 +2,6 @@ import TerminalCard from "@/components/TerminalCard";
 import LinksRail from "@/components/LinksRail";
 import Ticker from "@/components/Ticker";
 import VibePlayer from "@/components/VibePlayer";
-import CommitBreakdown from "@/components/CommitBreakdown";
 import Image from "next/image";
 import TypewriterTitle from "@/components/TypewriterTitle";
 
@@ -85,11 +84,6 @@ export default function Home() {
           ))}
         </ul>
       </TerminalCard>
-
-      <div className="h-4" />
-
-      {/* All-time commit breakdown */}
-      <CommitBreakdown />
 
       <Ticker items={tickerItems} />
     </main>

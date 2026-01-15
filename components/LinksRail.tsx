@@ -4,7 +4,6 @@ const links = [
   { name: "GitHub", href: "https://github.com/maimond123", icon: Github },
   { name: "LinkedIn", href: "https://www.linkedin.com/in/david-maimon-3227ab23a", icon: Linkedin },
   { name: "X / Twitter", href: "https://x.com/ma1mon1des", icon: Twitter },
-  { name: "Old Site", href: "https://startuptechnologies.wixsite.com/davidmaimon", icon: Link2 },
   { name: "Email", href: "mailto:david.maimon@duke.edu", icon: Mail },
 ];
 
