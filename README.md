@@ -1,4 +1,4 @@
-# DeSci Terminal
+# David's Terminal
 
 Environment variables for live metrics:
 
